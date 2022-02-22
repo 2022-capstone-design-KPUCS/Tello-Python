@@ -1,0 +1,3 @@
+pylogbeat==2.0.0
+python-logstash-async==2.3.0
+requests==2.27.1

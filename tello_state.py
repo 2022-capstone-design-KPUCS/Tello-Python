@@ -1,9 +1,16 @@
 import socket
 from time import sleep
 import curses
+import logging
+from logging.config import fileConfig
+import sys
+
+from logstash_async.hanlder import AsyncLogstashHandler
+
+HOST = 'localhost'
+PORT = 5959
 
 INTERVAL = 0.2
-
 
 
 def report(str):
@@ -14,7 +21,8 @@ if __name__ == "__main__":
     stdscr = curses.initscr()
     curses.noecho()
     curses.cbreak()
-
+    fileConfig('logging.conf', disable_existing_loggers=True)
+    logger = logger.getLogger()
     local_ip = ''
     local_port = 8890
     socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # socket for sending cmd
@@ -36,6 +44,7 @@ if __name__ == "__main__":
             out = response.replace(';', ';\n')
             out = 'Tello State:\n' + out
             report(out)
+            logger.info(out)
             sleep(INTERVAL)
     except KeyboardInterrupt:
         curses.echo()
